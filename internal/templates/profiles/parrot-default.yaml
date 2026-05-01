@@ -1,0 +1,14 @@
+apiVersion: contaigen.io/v1alpha1
+kind: EnvironmentProfile
+metadata:
+  name: parrot-default
+  description: Parrot Security workbench using the official tools-included Parrot image
+spec:
+  image: parrotsec/security
+  shell: /bin/bash
+  network:
+    profile: bridge
+  workspace:
+    mountPath: /workspace
+  pull: true
+  start: true

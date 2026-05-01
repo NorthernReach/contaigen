@@ -1,0 +1,25 @@
+apiVersion: contaigen.io/v1alpha1
+kind: EnvironmentProfile
+metadata:
+  name: kali-desktop
+  description: Browser-accessible Kali Rolling desktop using Kasm noVNC
+spec:
+  image: kasmweb/kali-rolling-desktop:1.18.0
+  shell: /bin/bash
+  user: root
+  network:
+    profile: bridge
+  desktop:
+    enabled: true
+    protocol: novnc
+    hostIP: 127.0.0.1
+    hostPort: "6901"
+    containerPort: "6901"
+    scheme: https
+    path: /
+    user: kasm_user
+    passwordEnv: VNC_PW
+  workspace:
+    mountPath: /workspace
+  pull: true
+  start: true

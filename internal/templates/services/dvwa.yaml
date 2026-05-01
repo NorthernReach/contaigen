@@ -1,0 +1,8 @@
+apiVersion: contaigen.io/v1alpha1
+kind: ServiceTemplate
+metadata:
+  name: dvwa
+  description: Damn Vulnerable Web Application target
+spec:
+  image: vulnerables/web-dvwa
+  alias: dvwa

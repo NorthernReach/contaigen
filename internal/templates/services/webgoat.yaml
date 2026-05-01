@@ -1,0 +1,10 @@
+apiVersion: contaigen.io/v1alpha1
+kind: ServiceTemplate
+metadata:
+  name: webgoat
+  description: OWASP WebGoat deliberately insecure training application
+spec:
+  image: webgoat/webgoat
+  alias: webgoat
+  env:
+    - TZ=UTC

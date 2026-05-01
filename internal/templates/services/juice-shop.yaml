@@ -1,0 +1,8 @@
+apiVersion: contaigen.io/v1alpha1
+kind: ServiceTemplate
+metadata:
+  name: juice-shop
+  description: OWASP Juice Shop vulnerable web application
+spec:
+  image: bkimminich/juice-shop
+  alias: juice-shop
