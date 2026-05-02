@@ -10,6 +10,14 @@ containerized workbench feel close to a daily VM: named environments, persistent
 workspaces, controlled networking, VPN sidecars, noVNC desktops, target services,
 logs, backups, and templates.
 
+## Current Status
+
+Contaigen v0.1.0 is the first public release. It is ready for early users who
+are comfortable with Docker-backed security tooling and command-line workflows.
+The v0.1 dogfooding run validated split-route OpenVPN, VPN-routed Parrot
+desktop access, segmented target services, workspace persistence, shell logging,
+encrypted backup/restore, and release artifacts.
+
 ## Features
 
 - Named Docker-backed workbench environments.
@@ -31,6 +39,20 @@ logs, backups, and templates.
 - Docker Engine or Docker Desktop.
 - For VPN gateways, a Docker host that supports the required VPN container
   capabilities and `/dev/net/tun` device mapping.
+
+## Install
+
+Download a release archive from GitHub, extract it, and place the `contaigen`
+binary somewhere on your `PATH`.
+
+macOS release artifacts are not signed or notarized yet. After verifying the
+release checksum, macOS users may need to remove the quarantine flag:
+
+```sh
+xattr -d com.apple.quarantine ./contaigen
+chmod +x ./contaigen
+./contaigen version
+```
 
 ## Build
 

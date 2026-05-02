@@ -7,17 +7,14 @@ semantic version tags.
 
 ## [Unreleased]
 
-### Added
+No unreleased changes.
 
-- GPLv3 project licensing.
-- Release-readiness documentation for v0.1.
-- Contributor and security policy documentation.
-
-## [0.1.0] - Pending
+## [0.1.0] - 2026-05-01
 
 ### Added
 
 - Cobra-based `contaigen` CLI.
+- GPLv3 project licensing.
 - Docker connectivity checks with `contaigen doctor`.
 - Environment profiles for Parrotsec and Kali terminal/desktop workbenches.
 - Persistent host-backed workspaces.
@@ -38,7 +35,8 @@ semantic version tags.
 - `contaigen nuke` for interactive or non-interactive cleanup of managed
   resources.
 - GoReleaser-based snapshot and GitHub release automation.
-- v0.1 dogfooding runbook and usage documentation.
+- Contributor, security, usage, template, release, and v0.1 dogfooding
+  documentation.
 
 ### Known Issues
 

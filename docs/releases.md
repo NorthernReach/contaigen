@@ -48,31 +48,137 @@ If GoReleaser is installed locally and you prefer the binary on your PATH, run:
 make snapshot GORELEASER=goreleaser
 ```
 
-## v0.1 Release Candidate Checklist
+## Release Candidate Procedure
 
-Before cutting a v0.1 tag or RC:
+Use release candidates when you want GitHub to build real artifacts without
+declaring the final release stable yet.
 
-- Run `gofmt` on changed Go files.
-- Run `go test ./...`.
-- Run `make release-check`.
-- Run `make snapshot`.
-- Complete the dogfooding runbook in `docs/dogfooding.md`.
-- Confirm the README and `docs/usage.md` match the current CLI behavior.
-- Confirm release archives include `LICENSE`, `CHANGELOG.md`, `SECURITY.md`,
-  `CONTRIBUTING.md`, and `docs/licensing.md`.
-- Confirm the Kali `nmap` capability behavior is documented as a known issue.
+1. Confirm the worktree is clean:
+
+   ```sh
+   git status --short
+   ```
+
+2. Run the release gates:
+
+   ```sh
+   go test ./...
+   make release-check
+   make snapshot
+   ```
+
+3. Push the release commit to the default branch before tagging:
+
+   ```sh
+   git push origin main
+   ```
+
+4. Create and push an annotated RC tag:
+
+   ```sh
+   git tag -a v0.1.0-rc.1 -m "Release v0.1.0-rc.1"
+   git push origin v0.1.0-rc.1
+   ```
+
+5. Wait for the `release` GitHub Actions workflow to complete.
+
+6. Download the generated artifacts from the GitHub Release and smoke test them:
+
+   ```sh
+   ./contaigen version
+   ./contaigen profile list
+   ./contaigen doctor
+   ```
+
+7. If the RC has problems, commit fixes and create the next RC tag, such as
+   `v0.1.0-rc.2`. Prefer a new RC tag over rewriting a published RC tag.
+
+## Standard Release Procedure
+
+Use this flow after an RC has passed validation.
+
+1. Finalize release-facing docs:
+
+   - Set the `CHANGELOG.md` release date.
+   - Update the README status if needed.
+   - Confirm known issues are documented.
+
+2. Run the release gates:
+
+   ```sh
+   go test ./...
+   make release-check
+   make snapshot
+   ```
+
+3. Commit and push the final release-prep changes:
+
+   ```sh
+   git add CHANGELOG.md README.md docs/releases.md
+   git commit -m "docs: finalize v0.1.0 release"
+   git push origin main
+   ```
+
+4. Create and push the final annotated release tag:
+
+   ```sh
+   git tag -a v0.1.0 -m "Release v0.1.0"
+   git push origin v0.1.0
+   ```
+
+5. Wait for the `release` GitHub Actions workflow to complete.
+
+6. Verify the GitHub Release includes:
+
+   - macOS, Linux, and Windows archives.
+   - Checksums file.
+   - `LICENSE`, `CHANGELOG.md`, `SECURITY.md`, `CONTRIBUTING.md`, README, and
+     docs in each archive.
+
+7. Download at least one final artifact, verify its checksum, and smoke test:
+
+   ```sh
+   ./contaigen version
+   ./contaigen profile list
+   ./contaigen doctor
+   ```
 
 ## Release Tags
 
 Public releases are tag-driven. Push a semantic version tag:
 
 ```sh
-git tag v0.1.0
+git tag -a v0.1.0 -m "Release v0.1.0"
 git push origin v0.1.0
 ```
 
 The `release` GitHub Actions workflow runs unit tests, builds platform archives,
 generates checksums, and publishes a GitHub Release.
+
+RC tags use prerelease semantic versions such as `v0.1.0-rc.1`. Final release
+tags use versions such as `v0.1.0`.
+
+Always tag the exact commit you want to release. Tags point at commits, not at
+uncommitted local changes.
+
+## macOS Gatekeeper
+
+The v0.1 macOS archives are not signed or notarized. Users may see this
+Gatekeeper message when running the downloaded binary:
+
+```text
+Apple could not verify "contaigen" is free of malware that may harm your Mac or
+compromise your privacy.
+```
+
+After verifying checksums from the release, remove the quarantine flag:
+
+```sh
+xattr -d com.apple.quarantine ./contaigen
+chmod +x ./contaigen
+```
+
+Future release work should add Developer ID signing and notarization.
 
 ## Version Metadata
 
